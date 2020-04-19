@@ -6,7 +6,7 @@ import { addQuote, removeQuote, upvoteQuote, downvoteQuote } from '../actions/qu
 class Quotes extends Component {
 
   renderQuotes = () => {
-    const { quotes, upvoteQuote, downvoteQuote } = this.props
+    const { quotes, upvoteQuote, downvoteQuote, removeQuote } = this.props
     return quotes.map(quote => {
       return <QuoteCard 
         key={quote.id}
@@ -50,4 +50,4 @@ const mapStateToProps = state => {
 }
 
 //add arguments to connect as needed
-export default connect(mapStateToProps, { upvoteQuote, downvoteQuote })(Quotes);
+export default connect(mapStateToProps, { upvoteQuote, downvoteQuote, removeQuote })(Quotes);
