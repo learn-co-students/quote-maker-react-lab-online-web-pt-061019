@@ -4,52 +4,81 @@ import { connect } from 'react-redux';
 import { addQuote } from '../actions/quotes';
 
 class QuoteForm extends Component {
-
   state = {
     //set up a controlled form with internal state
-  }
+    content: '',
+    author: '',
+  };
 
-  handleOnChange = event => {
+  handleOnChange = (event) => {
     // Handle Updating Component State
-  }
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    });
+  };
 
-  handleOnSubmit = event => {
+  handleOnSubmit = (event) => {
     // Handle Form Submit event default
+    event.preventDefault();
     // Create quote object from state
+    const quote = this.state;
+    // const quote = { ...this.state };
     // Pass quote object to action creator
+    this.props.addQuote({
+      ...quote,
+      id: uuid(),
+      votes: 0,
+    });
     // Update component state to return to default state
-  }
+    this.setState({ content: '', author: '' });
+  };
 
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-8 col-md-offset-2">
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <form className="form-horizontal">
-                  <div className="form-group">
-                    <label htmlFor="content" className="col-md-4 control-label">Quote</label>
-                    <div className="col-md-5">
+      <div className='container'>
+        <div className='row'>
+          <div className='col-md-8 col-md-offset-2'>
+            <div className='panel panel-default'>
+              <div className='panel-body'>
+                {/* >>>> add handleOnSubmit for forms <<<< */}
+                <form
+                  className='form-horizontal'
+                  onSubmit={this.handleOnSubmit}>
+                  <div className='form-group'>
+                    <label htmlFor='content' className='col-md-4 control-label'>
+                      Quote
+                    </label>
+                    <div className='col-md-5'>
+                      {/* >>>> add handleOnChange for input <<<< */}
                       <textarea
-                        className="form-control"
+                        className='form-control'
+                        name='content'
+                        onChange={this.handleOnChange}
                         value={this.state.content}
                       />
                     </div>
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="author" className="col-md-4 control-label">Author</label>
-                    <div className="col-md-5">
+                  <div className='form-group'>
+                    <label htmlFor='author' className='col-md-4 control-label'>
+                      Author
+                    </label>
+                    <div className='col-md-5'>
+                      {/* >>>> add handleOnChange for input <<<< */}
                       <input
-                        className="form-control"
-                        type="text"
+                        className='form-control'
+                        type='text'
+                        name='author'
+                        onChange={this.handleOnChange}
                         value={this.state.author}
                       />
                     </div>
                   </div>
-                  <div className="form-group">
-                    <div className="col-md-6 col-md-offset-4">
-                      <button type="submit" className="btn btn-default">Add</button>
+                  <div className='form-group'>
+                    <div className='col-md-6 col-md-offset-4'>
+                      <button type='submit' className='btn btn-default'>
+                        Add
+                      </button>
                     </div>
                   </div>
                 </form>
@@ -62,5 +91,15 @@ class QuoteForm extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addQuote: (quote) => dispatch(addQuote(quote)),
+  };
+};
+
 //add arguments to connect as needed
-export default connect()(QuoteForm);
+export default connect(null, mapDispatchToProps)(QuoteForm);
+// ES6:
+// export default connect(null, { addQuote })(QuoteForm);
+// same as:
+// export default connect(null, { addQuote: addQuote })(QuoteForm);
